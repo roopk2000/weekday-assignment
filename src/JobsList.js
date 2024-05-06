@@ -26,6 +26,7 @@ const JobsList = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log(data)
         setJobs(data.jdList);
         setTotalCount(data.totalCount);
       } catch (error) {
@@ -38,7 +39,6 @@ const JobsList = () => {
 
   return (
     <div className="jobs-list">
-      <h4>Jobs List</h4>
       {jobs && jobs.length > 0 && (
         <div className='job-cards'>
           {jobs.map((job) => (
@@ -55,20 +55,23 @@ const JobsList = () => {
                   </div>
                 </div>
                 <div className="job-details">
-                  <p>Estimated Salary: {job.maxJdSalary} {job.salaryCurrencyCode}</p>
+                  <p>Estimated Salary: {job.maxJdSalary} {job.salaryCurrencyCode} <span className="tick-mark">&#10004;</span></p>
                   <div className="about-role">
-                    <p>{job.jobDetailsFromCompany.slice(0, 200)}...</p>
+                    <p><strong>About Company:</strong></p>
+                    <p>{job.jobDetailsFromCompany.slice(0, 1000)}...</p>
                   </div>
-                  <a href={job.jdLink} target="_blank" rel="noopener noreferrer">Show more</a>
-                  <p>Min Experience: {job.maxExp} years</p>
-                  <button>Easy Apply</button>
+                  <a href={job.jdLink} target="_blank" rel="noopener noreferrer">View Job</a>
+                  <p><strong>Min Experience:</strong></p>
+                  <p> {job.maxExp} years</p>
+                  <button className="apply-button">Easy Apply</button>
+                  <button className='Referral-button'>Unlock Referral Asks</button>
+
                 </div>
               </div>
             </li>
           ))}
         </div>
       )}
-      <p>Total Jobs: {totalCount}</p>
     </div>
   );
 };
