@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import "./JobsList.css"
+import "./JobsList.css";
+
 const JobsList = () => {
   const [jobs, setJobs] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -26,7 +27,6 @@ const JobsList = () => {
         }
         const data = await response.json();
         setJobs(data.jdList);
-        console.log(data)
         setTotalCount(data.totalCount);
       } catch (error) {
         console.error('Fetch error:', error);
@@ -35,7 +35,7 @@ const JobsList = () => {
 
     fetchJobs();
   }, []);
-console.log(jobs)
+
   return (
     <div className="jobs-list">
       <h4>Jobs List</h4>
@@ -44,15 +44,24 @@ console.log(jobs)
           {jobs.map((job) => (
             <li key={job.jdUid}>
               <div className="job-card">
-                <img src={job.logoUrl} alt={`${job.companyName} Logo`} />
+                <div className="company-info">
+                  <div className="company-logo">
+                    <img src={job.logoUrl} alt={`${job.companyName} Logo`} />
+                  </div>
+                  <div className="company-details">
+                    <h5>{job.companyName}</h5>
+                    <p>{job.jobRole}</p>
+                    <p>{job.location}</p>
+                  </div>
+                </div>
                 <div className="job-details">
-                  <h5>{job.companyName}</h5>
-                  <p>Job Role: {job.jobRole}</p>
-                  <p>Location: {job.location}</p>
-                  <p>Max Experience: {job.maxExp} years</p>
-                  <p>Max Salary: {job.maxJdSalary} {job.salaryCurrencyCode}</p>
-                  <p>Job Details: {job.jobDetailsFromCompany}</p>
-                  <a href={job.jdLink} target="_blank" rel="noopener noreferrer">View Job</a>
+                  <p>Estimated Salary: {job.maxJdSalary} {job.salaryCurrencyCode}</p>
+                  <div className="about-role">
+                    <p>{job.jobDetailsFromCompany.slice(0, 200)}...</p>
+                  </div>
+                  <a href={job.jdLink} target="_blank" rel="noopener noreferrer">Show more</a>
+                  <p>Min Experience: {job.maxExp} years</p>
+                  <button>Easy Apply</button>
                 </div>
               </div>
             </li>
@@ -63,5 +72,8 @@ console.log(jobs)
     </div>
   );
 };
+
+
+
 
 export default JobsList;

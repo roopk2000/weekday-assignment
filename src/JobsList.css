@@ -8,21 +8,22 @@
   .job-cards {
     display: flex;
     flex-wrap: wrap;
+    gap: 20px;
     justify-content: center;
     margin-top: 30px;
   }
   
   .job-card {
+    display: flex;
+    flex-direction: column;
     width: 300px;
+    border: 1px solid #ccc;
+    padding: 20px;
     height: 400px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin: 20px;
-    padding: 20px;
     text-align: center;
     transition: transform 0.3s ease-in-out;
   }
@@ -58,3 +59,52 @@
   .job-card button:hover {
     background-color: #3e8e41;
   }
+  
+  .company-logo {
+    margin-right: 20px; /* Adjust margin as needed */
+  }
+  
+  .company-logo img {
+    max-width: 100px; /* Adjust max-width as needed */
+  }
+  
+  .company-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .about-role {
+    max-height: 80px; /* Set maximum height for the text */
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .about-role p {
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .about-role::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px; /* Height of the fade effect */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  }
+  
+  .job-details {
+    margin-top: 10px;
+  }
+  
+  .job-details p {
+    margin: 5px 0;
+  }
+  
+  .job-details a {
+    display: block;
+    margin-top: 10px;
+  }
+  
