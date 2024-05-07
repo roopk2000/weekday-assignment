@@ -1,0 +1,21 @@
+.form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    border-radius: 20px;
+}
+.label{
+    padding: 20px;
+}
+input{
+    border-radius: 8px;
+    height: 20px;
+}
+button{
+    border-radius: 8px;
+    background-color: Blue;
+    color: white;
+    height: 20px;
+    width: 45px;
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./JobsList.css";
+import Filters from './Filters';
 
 const JobsList = () => {
   const [jobs, setJobs] = useState([]);
@@ -26,7 +27,7 @@ const JobsList = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log(data)
+        console.log(data.jdList)
         setJobs(data.jdList);
         setTotalCount(data.totalCount);
       } catch (error) {
@@ -37,12 +38,34 @@ const JobsList = () => {
     fetchJobs();
   }, []);
 
+  const applyFilters = (filters) => {
+    // Filter the jobs based on the filter criteria
+    const filteredJobs = jobs.filter(job => {
+      const minExperienceMatch = !filters.minExperience || job.minExperience >= parseInt(filters.minExperience);
+      const companyNameMatch = !filters.companyName || job.companyName.toLowerCase().includes(filters.companyName.toLowerCase());
+      const locationMatch = !filters.location || job.location.toLowerCase().includes(filters.location.toLowerCase());
+      const remoteMatch = !filters.remote || job.remote.toLowerCase() === filters.remote.toLowerCase();
+      const techStackMatch = !filters.techStack || job.techStack.toLowerCase().includes(filters.techStack.toLowerCase());
+      const roleMatch = !filters.role || job.role.toLowerCase().includes(filters.role.toLowerCase());
+      const minBasePayMatch = !filters.minBasePay || job.minBasePay >= parseInt(filters.minBasePay);
+  
+      return minExperienceMatch && companyNameMatch && locationMatch && remoteMatch && techStackMatch && roleMatch && minBasePayMatch;
+    });
+  
+    // Update the job list with filtered jobs
+    setJobs(filteredJobs);
+  };
+  
+  
+
   return (
     <div className="jobs-list">
+            <Filters applyFilters={applyFilters} /> {/* Render the Filters component */}
+
       {jobs && jobs.length > 0 && (
-        <div className='job-cards'>
+        <div className='job-cards'> {/* Wrap list items in a ul element */}
           {jobs.map((job) => (
-            <li key={job.jdUid}>
+            <div key={job.jdUid}>
               <div className="job-card">
                 <div className="company-info">
                   <div className="company-logo">
@@ -65,15 +88,15 @@ const JobsList = () => {
                   <p> {job.maxExp} years</p>
                   <button className="apply-button">Easy Apply</button>
                   <button className='Referral-button'>Unlock Referral Asks</button>
-
                 </div>
               </div>
-            </li>
+            </div>
           ))}
         </div>
       )}
     </div>
   );
+  
 };
 
 
