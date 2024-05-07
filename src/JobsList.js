@@ -4,6 +4,7 @@ import Filters from './Filters';
 
 const JobsList = () => {
   const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]); // State to hold filtered jobs
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const JobsList = () => {
         const data = await response.json();
         console.log(data.jdList)
         setJobs(data.jdList);
+        setFilteredJobs(data.jdList); // Initialize filtered jobs with all jobs
         setTotalCount(data.totalCount);
       } catch (error) {
         console.error('Fetch error:', error);
@@ -41,30 +43,28 @@ const JobsList = () => {
   const applyFilters = (filters) => {
     // Filter the jobs based on the filter criteria
     const filteredJobs = jobs.filter(job => {
-      const minExperienceMatch = !filters.minExperience || job.minExperience >= parseInt(filters.minExperience);
-      const companyNameMatch = !filters.companyName || job.companyName.toLowerCase().includes(filters.companyName.toLowerCase());
-      const locationMatch = !filters.location || job.location.toLowerCase().includes(filters.location.toLowerCase());
-      const remoteMatch = !filters.remote || job.remote.toLowerCase() === filters.remote.toLowerCase();
-      const techStackMatch = !filters.techStack || job.techStack.toLowerCase().includes(filters.techStack.toLowerCase());
-      const roleMatch = !filters.role || job.role.toLowerCase().includes(filters.role.toLowerCase());
-      const minBasePayMatch = !filters.minBasePay || job.minBasePay >= parseInt(filters.minBasePay);
-  
+      const minExperienceMatch = !filters.minExperience || (job.minExperience && parseInt(job.minExperience) >= parseInt(filters.minExperience));
+      const companyNameMatch = !filters.companyName || (job.companyName && job.companyName.toLowerCase().includes(filters.companyName.toLowerCase()));
+      const locationMatch = !filters.location || (job.location && job.location.toLowerCase().includes(filters.location.toLowerCase()));
+      const remoteMatch = !filters.remote || (job.remote && job.remote.toLowerCase() === filters.remote.toLowerCase());
+      const techStackMatch = !filters.techStack || (job.techStack && job.techStack.toLowerCase().includes(filters.techStack.toLowerCase()));
+      const roleMatch = !filters.role || (job.role && job.role.toLowerCase().includes(filters.role.toLowerCase()));
+      const minBasePayMatch = !filters.minBasePay || (job.minBasePay && parseInt(job.minBasePay) >= parseInt(filters.minBasePay));
+    
       return minExperienceMatch && companyNameMatch && locationMatch && remoteMatch && techStackMatch && roleMatch && minBasePayMatch;
     });
   
-    // Update the job list with filtered jobs
-    setJobs(filteredJobs);
+    // Update the filtered jobs state
+    setFilteredJobs(filteredJobs);
   };
   
-  
-
   return (
     <div className="jobs-list">
-            <Filters applyFilters={applyFilters} /> {/* Render the Filters component */}
+      <Filters applyFilters={applyFilters} /> {/* Render the Filters component */}
 
-      {jobs && jobs.length > 0 && (
-        <div className='job-cards'> {/* Wrap list items in a ul element */}
-          {jobs.map((job) => (
+      {filteredJobs && filteredJobs.length > 0 && (
+        <div className='job-cards'> 
+          {filteredJobs.map((job) => (
             <div key={job.jdUid}>
               <div className="job-card">
                 <div className="company-info">
@@ -96,10 +96,6 @@ const JobsList = () => {
       )}
     </div>
   );
-  
 };
-
-
-
 
 export default JobsList;
